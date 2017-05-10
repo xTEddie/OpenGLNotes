@@ -174,3 +174,21 @@ Here is the command to change the color of the screen
 
 - **glClearColor(int x, int y, int z, int a)** sets the color that OpenGL uses to clear the colorbuffer.
 - **glClear** clears the entire buffer of the current framebuffer. When GL_COLOR_BUFFER_BIT is specified, the buffer is cleared to the color specified in **glClearColor**
+
+### Hello Triangle
+
+- In OpenGL, everything is in 3D space, but the screen and window are a 2D array of pixels, so OpenGL transforms all 3D coordinates to 2D to fit in the screen
+- The process of transforming 3D coordinates to 2D coordinates is managed by the graphics pipeline in OpenGL
+- The graphics pipeline can be divided into two large parts:
+  - Transform 3D coordinates to 2D coordinates
+  - Transform 2D coordinates into colored pixels
+- The graphics pipeline can be divided into several steps where each step requires the output of the previous step as its input
+- All the steps can easily be executed in parallel
+- The GPU of today have thousands of small processing cores to quickly process the data within the graphics pipeline by running small programs for each step
+- Small programs are called shaders
+- Some of these shaders can be configured by the developers to replace the default ones
+- Shaders are written in the OpenGL Shading Language (GLSL)
+
+Here is an abstract representation of all stages  of the graphics pipeline. The blue sections are configurable by the developers
+
+![Alt](https://learnopengl.com/img/getting-started/pipeline.png)
