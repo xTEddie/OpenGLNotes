@@ -138,7 +138,7 @@ We want to have some form of input control in GLFW and we can achieve this using
   }  
 ```
 
-- The function checks if the key pressed is the escape key and if it was pressed
+- The function checks if the key pressed is the escape key and if it was pressed (not release)
 
 The last thing to do is to register the callback function
 
@@ -147,3 +147,30 @@ The last thing to do is to register the callback function
 ```
 
 #### Rendering
+
+We want to place all the rendering commands in the game loop, since we want to execute all the rendering commands each iteration of the loop.
+
+```
+// Program loop
+  while(!glfwWindowShouldClose(window))
+  {
+      // Check and call events
+      glfwPollEvents();
+
+      // Rendering commands here
+      ...
+
+      // Swap the buffers
+      glfwSwapBuffers(window);
+  }
+```
+
+Here is the command to change the color of the screen
+
+```
+  glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+  glClear(GL_COLOR_BUFFER_BIT);
+```
+
+- **glClearColor(int x, int y, int z, int a)** sets the color that OpenGL uses to clear the colorbuffer.
+- **glClear** clears the entire buffer of the current framebuffer. When GL_COLOR_BUFFER_BIT is specified, the buffer is cleared to the color specified in **glClearColor**
