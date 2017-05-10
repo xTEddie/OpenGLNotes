@@ -192,3 +192,18 @@ Here is the command to change the color of the screen
 Here is an abstract representation of all stages  of the graphics pipeline. The blue sections are configurable by the developers
 
 ![Alt](https://learnopengl.com/img/getting-started/pipeline.png)
+
+- As an input to the graphics pipeline, we pass a list of three 3D coordinates that represent the coordinates of a triangle in an array called **Vertex Data**
+- The first part of the pipeline is the vertex shader that takes as input a single vertex
+- The main purpose of the vertex shader is to transform 3D coordinates into different 3D coordinates and the vertex shader allows us to do some basic processing on the vertex attributes
+- The primitive assembly takes all the vertices (or vertex if GL_POINTS is chosen) as an input from the vertex shader and assembles all the point(s) in the primitive shape given
+- The output of the primitive assembly stage is passed to the geometry shader
+- The geometry shader takes as input a collection of vertices that form a primitive and has the ability to generate other shapes by emitting new vertices to form other primitive(s)
+- The output of the geometry shader is then passed on the rasterization stage where it maps the resulting primitive(s) to the corresponding pixels on the final screen, resulting in fragment shader to use.
+- Before the fragment shaders runs, clipping is performed. Clipping discards all fragments that are outside your view, increasing performance.
+- A fragment in OpenGL is all the data required for OpenGL to render a single pixel
+- The main purpose of the fragment shader is to calculate the final color of a pixel and it is usually the stage where all the advanced OpenGL effects occur
+- Usually, the fragment shader contains data about the 3D scene that it can use to calculate the final pixel color (lights, shadows, color of the light and so on)
+- Once all the corresponding color values have been determined, the final object is passed to the last stage called alpha test and blending stage
+- The last stage checks the depth (and stencil) of the fragment and uses those to check if the resulting fragment is in front or behind other objects and should be discarded accordingly
+- In modern OpenGL we are required to define at least the vertx and fragment shader on our own. The geometry shader is optional and usually left to its default shader
