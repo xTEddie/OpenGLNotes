@@ -257,3 +257,21 @@ From that point on any buffer call  we make on GL_ARRAY_BUFFER will be used to c
   - GL_DYNAMIC_DRAW: the data is likely to change a lot.
   - GL_STREAM_DRAW: the data will change every time it is drawn.
 - The position data of the triangle does not change and stays the same for every render call so its usage type should best be GL_STATIC_DRAW. - If one would have a buffer with data that is likely to change frequently, a usage type of GL_DYNAMIC_DRAW or GL_STREAM_DRAW ensures the graphics card will place the data in memory that allows for faster writes.
+
+#### Vertex Shader
+
+Modern OpenGL requires us to at least set up the vertex and fragment shader if we want to do some rendering. The shader language GLSL (OpenGL Shading Language) is used to write the vertex shader.
+
+```
+  #version 330 core
+
+  layout (location = 0) in vec3 position;
+
+  void main()
+  {
+    gl_Position = vec4(position.x, position.y, position.z, 1.0);
+  }
+```
+
+- **vec3** position is an input variable of 3D coordinates and the location of the variable is set to 0
+- To set the output of the vertex shader we have to assign the position data to the predefined **gl_Position**
