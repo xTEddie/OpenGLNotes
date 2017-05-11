@@ -207,3 +207,53 @@ Here is an abstract representation of all stages  of the graphics pipeline. The 
 - Once all the corresponding color values have been determined, the final object is passed to the last stage called alpha test and blending stage
 - The last stage checks the depth (and stencil) of the fragment and uses those to check if the resulting fragment is in front or behind other objects and should be discarded accordingly
 - In modern OpenGL we are required to define at least the vertx and fragment shader on our own. The geometry shader is optional and usually left to its default shader
+
+#### Vertex Input
+
+- All coordinate we specify in OpenGL are in 3D
+- OpenGL only processes 3D coordinates when they're in specific range between -1.0 to 1.0 on all 3 axes (x, y and z)
+- Because OpenGL works in 3D, we render a 2D triangle with each vertex having a z coordinate of 0.0. This way the depth of the triangle remains the same making it
+look like 2D
+
+```
+  GLfloat vertices[] = {
+      -0.5f, -0.5f, 0.0f,
+       0.5f, -0.5f, 0.0f,
+       0.0f,  0.5f, 0.0f
+  };  
+```
+
+- With the vertex data defined, we'd like to send it as input to the vertex shader. This is done by creating memory on the GPU where to store the vertex data configure how OpenGL should interpret the memory and specify how to send data to the graphic card
+- The vertex shader then processes as much vertices as we tell it to from its memory
+- We manage memory via vertex buffer object (VBO) that can store a large number of vertices in the GPU's memory
+- The advantage using VBO is that we can send large batches of data all at once to the graphics card without having to send data a vertex at a time
+- Sending data to the graphics card from the CPU is slow, so we try to send as much data possible at once
+- Once the data is in the graphics card's memory, the vertex shader has almost instant access to the vertices
+
+```
+  GLuint VBO;
+  glGenBuffers(1, &VBO);
+```
+ - **glGenBuffers(GLsizei size, GLuint* buffers)** generates one/mutliple buffer objects and store each object's ID to the buffers' array
+
+OpenGL allows us to bind several buffers at once as long as they have a different buffer type
+
+ ```
+ glBindBuffer(GL_ARRAY_BUFFER, VBO);  
+ ```
+
+From that point on any buffer call  we make on GL_ARRAY_BUFFER will be used to configure the currently bound buffer, which is VBO
+
+```
+  glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+```
+
+- **glBufferData** is a function to copy user-defined data into the currently bound buffer
+- Its first argument is the type of the buffer we want to copy data into
+- The second argument specifies the size of the data (in bytes) we want to pass to the buffer
+- The third parameter is the actual dat we want to send
+- The fourth parameter specifies  how we want the graphics card to manage the given data:
+  - GL_STATIC_DRAW: the data will most likely not change at all or very rarely.
+  - GL_DYNAMIC_DRAW: the data is likely to change a lot.
+  - GL_STREAM_DRAW: the data will change every time it is drawn.
+- The position data of the triangle does not change and stays the same for every render call so its usage type should best be GL_STATIC_DRAW. - If one would have a buffer with data that is likely to change frequently, a usage type of GL_DYNAMIC_DRAW or GL_STREAM_DRAW ensures the graphics card will place the data in memory that allows for faster writes.
