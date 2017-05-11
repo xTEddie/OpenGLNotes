@@ -275,3 +275,37 @@ Modern OpenGL requires us to at least set up the vertex and fragment shader if w
 
 - **vec3** position is an input variable of 3D coordinates and the location of the variable is set to 0
 - To set the output of the vertex shader we have to assign the position data to the predefined **gl_Position**
+
+#### Compiling a shader
+
+We wrote the source code for the vertex shader, but it has to be compiled at run-time in order to use it
+
+We need to create a shader object
+
+```
+GLuint vertexShader;
+vertexShader = glCreateShader(GL_VERTEX_SHADER);
+```
+
+Next we attach the shader source code to the shader objct and compile the shader
+
+```
+  glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
+  glCompileShader(vertexShader);
+```
+
+- **glShaderSource** takes the shader object to compile as its first argument, takes the number of strings passing as source code as second argument, takes the source code of the vertexshader as the third parameter and the 4th parameter can be set to NULL
+
+- It is recommended to check if the shader compilation was successful or not
+
+```
+  GLint success;
+  GLchar infoLog[512];
+  glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
+  if(!success)
+  {
+      glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
+      std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
+  }  
+```
+
