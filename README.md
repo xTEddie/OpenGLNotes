@@ -309,3 +309,67 @@ Next we attach the shader source code to the shader objct and compile the shader
   }  
 ```
 
+#### Fragment shader
+
+The fragment shader is all about calculating the color output of the pixels.
+Colors in computer graphics are represented as an array of 4 values: RGBA
+
+```
+  #version 330 core
+
+  out vec4 color;
+
+  void main()
+  {
+      color = vec4(1.0f, 0.5f, 0.2f, 1.0f);
+  } 
+```
+
+The process for compiling a fragment shader is similar to the vertex shader,but we use the GL_FRAGMENT_SHADER constant as the shader type
+
+```
+  GLuint fragmentShader;
+  fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+  glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
+  glCompileShader(fragmentShader);
+```
+
+Both shaders are now compiled and the only thing left to do is to link both shaders into a shader program for rendering
+
+Creating a shader program is simple
+
+```
+  GLuint shaderProgram;
+  shaderProgram = glCreateProgram();
+```
+
+We need to attach the shaders to the shader program
+
+```
+  glAttachShader(shaderProgram, vertexShader);
+  glAttachShader(shaderProgram, fragmentShader);
+  glLinkProgram(shaderProgram);
+```
+
+It is recommended to check whether the linking of the program succeeded
+
+```
+  glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
+  if(!success) {
+      glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
+      ...
+  }
+```
+
+Once everything is correct, we can activate the shader program as follow
+
+```
+  glUseProgram(shaderProgram);
+```
+
+Don't forget to delete the shader objects once we no longer need them anymore
+
+```
+  glDeleteShader(vertexShader);
+  glDeleteShader(fragmentShader);  
+```
